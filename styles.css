@@ -1,6 +1,12 @@
 body {
-    background: grey;
+    background: #f9f9f9;
+    color: #0f0f0f;
     margin: 0;
-    text-align: center;
-    padding-top: 80px;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
