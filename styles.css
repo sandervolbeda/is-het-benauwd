@@ -1,12 +1,12 @@
-#map {
-    height: 500px;
-    width: 100%;
-}
-
 body {
     background: #f9f9f9;
     color: #0f0f0f;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 80px;
+    font-family: 'Arial', sans-serif;
 }
 
 .container {
