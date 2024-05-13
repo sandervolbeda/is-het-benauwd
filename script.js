@@ -1,7 +1,7 @@
 function checkHumidity() {
-    const location = document.getElementById('locationInput').value;
+    const location = 'Groningen';
     const apiKey = '7f809748ab';  // Je eigen API-key
-    const url = `https://weerlive.nl/api/weerlive_api_v2.php?key=${apiKey}&locatie=${encodeURIComponent(location)}&callback=?`;
+    const url = `https://weerlive.nl/api/weerlive_api_v2.php?key=${apiKey}&locatie=${encodeURIComponent(location)}`;
 
     fetchJsonp(url)
         .then(response => response.json())
@@ -9,12 +9,7 @@ function checkHumidity() {
             const weerdata = data.liveweer[0];
             const temp = weerdata.temp;
             const luchtvochtigheid = weerdata.lv;
-            const samenvatting = weerdata.samenv;
             const resultElement = document.getElementById('weatherResult');
-            const summaryElement = document.getElementById('weatherSummary');
-
-            // Update the page with the weather summary
-            summaryElement.textContent = `Weeroverzicht: ${samenvatting}`;
 
             // Check if it's humid based on temperature and humidity
             if (parseInt(luchtvochtigheid) > 70 && parseInt(temp) > 20) {
@@ -40,7 +35,7 @@ function fetchJsonp(url) {
             delete window[id];
         };
 
-        script.src = `${url}${url.includes('?') ? '&' : '?'}callback=${id}`;
+        script.src = `${url}&callback=${id}`;
         script.onerror = reject;
         document.head.appendChild(script);
     });
