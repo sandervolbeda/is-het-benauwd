@@ -8,8 +8,21 @@
 </head>
 <body>
     <div class="container">
-        <h1>Weercheck voor Groningen</h1>
-        <button onclick="checkHumidity()">Controleer of het benauwd is</button>
+        <h1>Is het benauwd?</h1>
+        <label for="locationSelect">Kies een locatie:</label>
+        <select id="locationSelect">
+            <option value="Groningen">Groningen</option>
+            <option value="Amsterdam">Amsterdam</option>
+            <option value="Rotterdam">Rotterdam</option>
+            <option value="Den Haag">Den Haag</option>
+            <option value="Utrecht">Utrecht</option>
+            <option value="Eindhoven">Eindhoven</option>
+            <option value="Tilburg">Tilburg</option>
+            <option value="Almere">Almere</option>
+            <option value="Breda">Breda</option>
+            <option value="Nijmegen">Nijmegen</option>
+        </select>
+        <button onclick="checkHumidity()">Controleer het weer</button>
         <p id="weatherResult"></p>
     </div>
 </body>
