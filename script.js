@@ -1,22 +1,23 @@
 document.addEventListener('DOMContentLoaded', function() {
     requestLocation();
-    fillLocationDropdown(); // Fill the dropdown with location names
+    populateDropdown();
 });
 
-// Function to fill the dropdown with location names
-function fillLocationDropdown() {
-    fetch('https://metatopos.dijkewijk.nl/metatopos-places.json')
-        .then(response => response.json())
-        .then(data => {
-            const locationSelect = document.getElementById('locationSelect');
-            data.forEach(place => {
-                const option = document.createElement('option');
-                option.value = place.name;
-                option.textContent = place.name;
-                locationSelect.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Error fetching location data:', error));
+async function populateDropdown() {
+    try {
+        const response = await fetch('places.json'); // Zorg dat dit lokaal pad correct is
+        const places = await response.json();
+
+        const placeSelect = document.getElementById('placeSelect');
+        places.forEach(place => {
+            const option = document.createElement('option');
+            option.value = place;
+            option.textContent = place;
+            placeSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching places:', error);
+    }
 }
 
 // Function to display current location
@@ -34,11 +35,11 @@ function displayCurrentLocation(locationName) {
 // Function to check if geolocation is supported and get the user's current position
 function requestLocation() {
     if (navigator.geolocation) {
-        const locationIcon = document.getElementById('locationIcon');
-        const loadingIcon = document.getElementsByClassName('spinner')[0];
+       // const locationIcon = document.getElementById('locationIcon');
+       // const loadingIcon = document.getElementsByClassName('spinner')[0];
 
-        locationIcon.style.display = 'none'; // Hide the location icon
-        loadingIcon.style.display = 'inline'; // Show the loading icon
+       // locationIcon.style.display = 'none'; // Hide the location icon
+       // loadingIcon.style.display = 'inline'; // Show the loading icon
 
         navigator.geolocation.getCurrentPosition(function(position) {
             const lat = position.coords.latitude;
@@ -55,7 +56,7 @@ function requestLocation() {
 
 // Function to check humidity based on coordinates
 function checkHumidity(lat, lon) {
-    const location = document.getElementById('locationSelect').value;
+    const location = document.getElementById('placeSelect').value;
     const apiKey = '7f809748ab';   // Your API key here
     const url = `https://weerlive.nl/api/weerlive_api_v2.php?key=${apiKey}&locatie=${encodeURIComponent(location)}&format=json`;
 
