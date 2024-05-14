@@ -8,23 +8,31 @@
     <link href="output.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Is het benauwd?</h1>
-        <label for="placeSelect">Selecteer plaats:</label>
-        <select id="placeSelect">
-            <!-- Options will be dynamically added here -->
-        </select>
-        <button onclick="checkHumidity()">Controleer het weer</button>
-        <p id="weatherResult"></p>
-        
-        <!-- <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-        </svg> -->
+    <div class="container flex items-center justify-center flex-col">
+        <div class="z-50 min-w-sm px-10 py-3 md:py-4 md:px-12 rounded-xl glass-effect text-frost-effect max-w-96">
+            <h1 class="text-center text-4xl">Is het benauwd?</h1>
 
-        <!-- <p id="currentLocation"> <i id="locationIcon" class="fas fa-map-marker-alt"></i> Huidige locatie: <span id="locationName"></span></p> -->
+            <img class="" src="/images/weather-icon.png">
 
-        <div class="container">
-            <option value="geolocation">Gebruik mijn huidige locatie</option>
+            
+            <p id="weatherResult"></p>
+            
+            <!-- <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+            </svg> -->
+    
+            <!-- <p id="currentLocation"> <i id="locationIcon" class="fas fa-map-marker-alt"></i> Huidige locatie: <span id="locationName"></span></p> -->
+    
+            <div class="container text-center">
+                <button id="geolocationButton" class="">Gebruik mijn huidige locatie</button>
+            </div>
+        </div>
+        <div class="max-w-96 flex flex-col justify-center">
+            <label for="placeSelect">Selecteer plaats:</label>
+            <select id="placeSelect">
+                <!-- Options will be dynamically added here -->
+            </select>
+            <button onclick="checkHumidity()">Controleer het weer</button>
         </div>
     </div>
     <footer>
