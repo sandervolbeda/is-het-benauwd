@@ -35,22 +35,18 @@ function displayCurrentLocation(locationName) {
 // Function to check if geolocation is supported and get the user's current position
 function requestLocation() {
     if (navigator.geolocation) {
-       // const locationIcon = document.getElementById('locationIcon');
-       // const loadingIcon = document.getElementsByClassName('spinner')[0];
-
-       // locationIcon.style.display = 'none'; // Hide the location icon
-       // loadingIcon.style.display = 'inline'; // Show the loading icon
-
         navigator.geolocation.getCurrentPosition(function(position) {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
             console.log(`Latitude: ${lat}, Longitude: ${lon}`); // Log the user's location to the console
             checkHumidity(lat, lon); // Call checkHumidity function with coordinates
-        }, function() {
-            console.error('Geolocation is denied or not available');
+        }, function(error) {
+            console.error('Geolocation is denied or not available', error.message);
+            alert('Geolocation is denied or not available. Please enable it to use this feature.');
         });
     } else {
         console.error('Geolocation is not supported by this browser.');
+        alert('Geolocation is not supported by this browser.');
     }
 }
 
