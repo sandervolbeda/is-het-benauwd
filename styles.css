@@ -34,7 +34,7 @@ body {
 
 .glass-effect {
     background-color: #ffffff10;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(6px);
     border: 2px solid rgba(255, 252, 252, 0.18);
 }
 
@@ -57,6 +57,8 @@ input[type="text"] {
     width: 300px;
     font-size: 16px;  
 }
+
+
 
 .spinner {
     animation: rotator 1.4s linear infinit e;

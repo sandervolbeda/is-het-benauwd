@@ -635,6 +635,10 @@ video {
   line-height: 2.5rem;
 }
 
+.no-underline {
+  text-decoration-line: none;
+}
+
 body {
   background-image: url('/images/background/rainforest.jpg');
   background-size: cover;
@@ -667,8 +671,8 @@ body {
 
 .glass-effect {
   background-color: #ffffff10;
-  -webkit-backdrop-filter: blur(12px);
-          backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
   border: 2px solid rgba(255, 252, 252, 0.18);
 }
 
