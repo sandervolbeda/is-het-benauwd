@@ -9,30 +9,33 @@
 </head>
 <body>
     <div class="container flex items-center justify-center flex-col">
-        <div class="z-50 min-w-sm px-10 py-3 md:py-4 md:px-12 rounded-xl glass-effect text-frost-effect max-w-96">
-            <h1 class="text-center text-4xl">Is het benauwd?</h1>
-
-            <img class="" src="/images/weather-icon.png">
-
-            
-            <p id="weatherResult"></p>
-            
-            <!-- <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-            </svg> -->
-    
-            <!-- <p id="currentLocation"> <i id="locationIcon" class="fas fa-map-marker-alt"></i> Huidige locatie: <span id="locationName"></span></p> -->
-    
-            <div class="container text-center">
-                <button id="geolocationButton" class="no-underline">Gebruik mijn huidige locatie</button>
+        <div class="cards max-w-96">
+            <div class="rounded-xl glass-effect text-frost-effect z-50 min-w-sm px-2 py-3 md:py-4 md:px-12 w-full mb-4">
+                <h1 class="text-center text-4xl drop-shadow-xl mb-2">Is het benauwd?</h1>
+                <p class="mb-2 text-center">Bekijk of het benauwd is bij jouw in de buurt. Deel je locatie of zoek handmatig op basis van je verblijfplaats.</p>
             </div>
-        </div>
-        <div class="max-w-96 flex flex-col justify-center">
-            <label for="placeSelect">Selecteer plaats:</label>
-            <select id="placeSelect">
-                <!-- Options will be dynamically added here -->
-            </select>
-            <button onclick="checkHumidity()">Controleer het weer</button>
+            <div class="z-50 min-w-sm px-10 py-3 md:py-4 md:px-12 rounded-xl glass-effect text-frost-effect mb-4 w-full">
+                <!-- <img class="" src="/images/weather-icon.png"> -->
+                <div id="loadingSpin" class="flex items-center justify-center mb-4">
+                    <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                    </svg>
+                </div>
+                <p id="weatherResult" class="text-center text-2xl mb-1 font-bold block"></p>
+                <p id="locationName" class="text-center text-xl block"></p>
+                <div class="container text-center">
+                    <p id="retryMessage" style="display:none;">Toegang tot locatie geweigerd. Probeer het opnieuw of selecteer handmatig je verblijfplaats.</p>
+                </div>
+            </div>
+            <p class="text-center mb-8 text-frost-effect">De benauwd wordt gecontroleerd op basis van actuele data op dit moment.</p>
+            <div class="flex flex-col justify-center w-full z-50 min-w-sm px-10 py-3 md:py-4 md:px-12 rounded-xl glass-effect text-frost-effect">
+                <p class="mb-4">Ben je benieuwd hoe de benauwdheid er voor staat bij een andere locatie?</p>
+                <label for="placeSelect">Selecteer plaats:</label>
+                <select id="placeSelect" class="rounded mb-4" style="height: 40px;">
+                    <!-- Options will be dynamically added here -->
+                </select>
+                <button onclick="checkHumidity()" class="rounded">Controleer benauwdheid</button>
+            </div>
         </div>
     </div>
     <footer>

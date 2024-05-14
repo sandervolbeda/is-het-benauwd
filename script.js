@@ -35,11 +35,14 @@ function displayCurrentLocation(locationName) {
 // Function to check if geolocation is supported and get the user's current position
 function requestLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(async function(position) {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
             console.log(`Latitude: ${lat}, Longitude: ${lon}`); // Log the user's location to the console
-            checkHumidity(lat, lon); // Call checkHumidity function with coordinates
+
+            const locationName = await getLocationName(lat, lon);
+            setDropdownValue(locationName);
+            checkHumidity(lat, lon, true); // Call checkHumidity function with coordinates and indicate it's a geolocation request
         }, function(error) {
             console.error('Geolocation is denied or not available', error.message);
             alert('Geolocation is denied or not available. Please enable it to use this feature.');
@@ -50,9 +53,40 @@ function requestLocation() {
     }
 }
 
+async function getLocationName(lat, lon) {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.address.city || data.address.town || data.address.village || 'Unknown';
+    } catch (error) {
+        console.error('Error fetching location name:', error);
+        return 'Unknown';
+    }
+}
+
+function setDropdownValue(locationName) {
+    const placeSelect = document.getElementById('placeSelect');
+    const options = placeSelect.options;
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].value.toLowerCase() === locationName.toLowerCase()) {
+            placeSelect.selectedIndex = i;
+            break;
+        }
+    }
+}
+
 // Function to check humidity based on coordinates
-function checkHumidity(lat, lon) {
-    const location = document.getElementById('placeSelect').value;
+function checkHumidity(lat, lon, isGeolocation = false) {
+    const loadingSpin = document.getElementById('loadingSpin');
+    loadingSpin.style.display = 'block'; // Show the loading spinner
+
+    let location;
+    if (isGeolocation) {
+        location = `${lat},${lon}`; // Use coordinates if it's a geolocation request
+    } else {
+        location = document.getElementById('placeSelect').value;
+    }
     const apiKey = '7f809748ab';   // Your API key here
     const url = `https://weerlive.nl/api/weerlive_api_v2.php?key=${apiKey}&locatie=${encodeURIComponent(location)}&format=json`;
 
@@ -64,16 +98,22 @@ function checkHumidity(lat, lon) {
                 const temp = parseInt(weerdata.temp);
                 const luchtvochtigheid = parseInt(weerdata.lv);
                 const resultElement = document.getElementById('weatherResult');
+                const locationNameElement = document.getElementById('locationName');
 
                 const benauwdheidIndex = determineHumidityLevel(temp, luchtvochtigheid);
                 resultElement.textContent = describeHumidityLevel(benauwdheidIndex);
+                locationNameElement.textContent = `Locatie: ${weerdata.plaats}`; // Display location name
+
+                loadingSpin.style.display = 'none'; // Hide the loading spinner
             } else {
                 document.getElementById('weatherResult').textContent = 'Geen weergegevens gevonden.';
+                loadingSpin.style.display = 'none'; // Hide the loading spinner
             }
         })
         .catch(error => {
             console.error('Error fetching the weather data:', error);
             document.getElementById('weatherResult').textContent = 'Fout bij het ophalen van de weergegevens.';
+            loadingSpin.style.display = 'none'; // Hide the loading spinner
         });
 }
 
@@ -98,12 +138,12 @@ function describeHumidityLevel(humidityLevel) {
     // For example:
     switch (humidityLevel) {
         case 'high':
-            return 'Het is erg benauwd buiten.';
+            return 'Pas op! Het is erg benauwd buiten.';
         case 'moderate':
-            return 'Het is redelijk benauwd buiten.';
+            return 'Het is benauwd buiten.';
         case 'low':
-            return 'Het is niet erg benauwd buiten.';
+            return 'Het is niet benauwd.';
         default:
-            return 'Het is niet erg benauwd buiten.';
+            return 'Het is niet benauwd.';
     }
 }

@@ -7,34 +7,57 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;  
-    color: #0f0f0f; 
+    color: #0b0b0bba !important; 
     margin: 0;
     display: flex; 
-    flex-direction: column;
-    align-items: center;  
+    flex-direction: column;   
+    align-items: center;    
     padding-top: 80px; 
     font-family: 'Arial', sans-serif;
-    min-height: 100vh;
+    min-height: 100vh;    
+    position: relative; /* Belangrijk voor de positionering van het pseudo-element */
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Verander de kleur en doorzichtigheid naar wens */
+    z-index: -1; /* Zorg ervoor dat de overlay achter de inhoud blijft */
+}
+
+/* Zorg ervoor dat de z-index van de content hoger is dan die van de overlay */
+body > * {
+    position: relative;
+    z-index: 1;
+}
+ 
+#placeSelect {
+    color:#0f0f0f; 
+    padding: 8px 4px; 
 }
 
 .container {
-    max-width: 1200px;
-    width: 100%;
-    margin-left: auto;
+    max-width: 1200px; 
+    width: 100%;  
+    margin-left: auto; 
     margin-right: auto;
 }
 
 .icon--frosted {
-    fill: rgba(255, 252, 252, 0.8);
+    fill: rgba(255, 252, 252, 0.8); 
 }
 
 .text-frost-effect {
     color: rgba(255, 252, 252, 0.8);
-}
-
+} 
+  
 .glass-effect {
-    background-color: #ffffff10;
-    backdrop-filter: blur(6px);
+    background-color: #ffffff45;
+    backdrop-filter: blur(6px); 
     border: 2px solid rgba(255, 252, 252, 0.18);
 }
 
@@ -42,7 +65,7 @@ button {
     background-color: #0084ff;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 20px; 
     cursor: pointer;
     font-size: 16px;
 }

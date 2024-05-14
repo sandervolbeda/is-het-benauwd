@@ -592,8 +592,32 @@ video {
   z-index: 50;
 }
 
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.block {
+  display: block;
+}
+
 .flex {
   display: flex;
+}
+
+.w-full {
+  width: 100%;
 }
 
 .max-w-96 {
@@ -612,6 +636,10 @@ video {
   justify-content: center;
 }
 
+.rounded {
+  border-radius: 0.25rem;
+}
+
 .rounded-xl {
   border-radius: 0.75rem;
 }
@@ -619,6 +647,11 @@ video {
 .px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .py-3 {
@@ -630,13 +663,28 @@ video {
   text-align: center;
 }
 
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
 }
 
-.no-underline {
-  text-decoration-line: none;
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.drop-shadow-xl {
+  --tw-drop-shadow: drop-shadow(0 20px 13px rgb(0 0 0 / 0.03)) drop-shadow(0 8px 5px rgb(0 0 0 / 0.08));
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 body {
@@ -644,7 +692,7 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  color: #0f0f0f;
+  color: #0b0b0bba !important;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -652,6 +700,33 @@ body {
   padding-top: 80px;
   font-family: 'Arial', sans-serif;
   min-height: 100vh;
+  position: relative;
+  /* Belangrijk voor de positionering van het pseudo-element */
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Verander de kleur en doorzichtigheid naar wens */
+  z-index: -1;
+  /* Zorg ervoor dat de overlay achter de inhoud blijft */
+}
+
+/* Zorg ervoor dat de z-index van de content hoger is dan die van de overlay */
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+#placeSelect {
+  color:#0f0f0f;
+  padding: 8px 4px;
 }
 
 .container {
@@ -670,7 +745,7 @@ body {
 }
 
 .glass-effect {
-  background-color: #ffffff10;
+  background-color: #ffffff45;
   -webkit-backdrop-filter: blur(6px);
           backdrop-filter: blur(6px);
   border: 2px solid rgba(255, 252, 252, 0.18);
