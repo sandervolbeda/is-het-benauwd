@@ -1,3 +1,5 @@
+let choices;
+
 document.addEventListener('DOMContentLoaded', function() {
     requestLocation();
     populateDropdown();
@@ -33,12 +35,19 @@ async function populateDropdown() {
 
 function initializeChoices() {
     const placeSelect = document.getElementById('placeSelect');
-    new Choices(placeSelect, {
+    choices = new Choices(placeSelect, {
         searchEnabled: true,
         shouldSort: false,
         placeholderValue: 'Selecteer een plaats',
         noResultsText: 'Geen resultaten gevonden'
     });
+}
+
+function setDropdownValue(locationName) {
+    if (choices) {
+        choices.removeActiveItems(); // Clear current selection
+        choices.setChoiceByValue(locationName); // Set new selection
+    }
 }
 
 function requestLocation() {
@@ -49,7 +58,7 @@ function requestLocation() {
             console.log(`Latitude: ${lat}, Longitude: ${lon}`); // Log the user's location to the console
 
             const locationName = await getLocationName(lat, lon);
-            setDropdownValue(locationName);
+            setDropdownValue(locationName); // Set the dropdown value to the detected location
             checkHumidity(lat, lon, true); // Call checkHumidity function with coordinates and indicate it's a geolocation request
         }, function(error) {
             console.error('Geolocation is denied or not available', error.message);
@@ -70,19 +79,6 @@ async function getLocationName(lat, lon) {
     } catch (error) {
         console.error('Error fetching location name:', error);
         return 'Unknown';
-    }
-}
-
-function setDropdownValue(locationName) {
-    const placeSelect = document.getElementById('placeSelect');
-    const options = placeSelect.options;
-    for (let i = 0; i < options.length; i++) {
-        if (options[i].value.toLowerCase() === locationName.toLowerCase()) {
-            placeSelect.selectedIndex = i;
-            const event = new Event('change', { bubbles: true });
-            placeSelect.dispatchEvent(event); // Trigger change event for Choices.js
-            break;
-        }
     }
 }
 
@@ -111,11 +107,7 @@ function checkHumidity(lat, lon, isGeolocation = false) {
 
                 const benauwdheidIndex = determineHumidityLevel(temp, luchtvochtigheid);
                 resultElement.textContent = describeHumidityLevel(benauwdheidIndex);
-                if (!isGeolocation) {
-                    locationNameElement.textContent = `Locatie: ${location}`; // Display location name
-                } else {
-                    locationNameElement.textContent = `Locatie: ${data.liveweer[0].plaats}`; // Display location name
-                }
+                locationNameElement.textContent = `Locatie: ${isGeolocation ? data.liveweer[0].plaats : location}`; // Display location name
 
                 loadingSpin.style.display = 'none'; // Hide the loading spinner
             } else {

@@ -12,8 +12,8 @@ body {
     display: flex; 
     flex-direction: column;    
     align-items: center;    
-    padding-top: 120px;  
-    font-family: 'Arial', sans-serif; 
+    padding-top: 120px;   
+    font-family: 'Arial', sans-serif;    
     min-height: 100vh;    
     position: relative; /* Belangrijk voor de positionering van het pseudo-element */
 }
