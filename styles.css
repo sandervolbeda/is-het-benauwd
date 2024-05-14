@@ -3,10 +3,10 @@
 @import 'tailwindcss/utilities';
 
 body {
-    background-image: url('/images/background/rainforest.jpg');
+    /* background-image: url('/images/background/rainforest.jpg');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;   
+    background-repeat: no-repeat;   */
     color: #0b0b0bba !important; 
     margin: 0;
     display: flex; 
@@ -19,21 +19,22 @@ body {
 }
 
 body::before {  
-    content: '';
+    content: "";
     position: absolute;
-    top: 0;
+    top: 0; 
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Verander de kleur en doorzichtigheid naar wens */
-    z-index: -1; /* Zorg ervoor dat de overlay achter de inhoud blijft */
+    background: url('/images/background/noisetexture.png') repeat;
+    opacity: 0.3; /* Adjust the opacity as needed */
+    pointer-events: none; /* Allow clicks to pass through */
 }
 
 /* Zorg ervoor dat de z-index van de content hoger is dan die van de overlay */
 body > * {
     position: relative;
     z-index: 1;
-}
+} 
  
 #placeSelect {
     color:#0f0f0f; 
