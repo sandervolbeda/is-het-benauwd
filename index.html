@@ -4,27 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Is het benauwd buiten?</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
     <link href="output.css" rel="stylesheet">
-    <script src="script.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Nvds2ZlA5lMq8P8eNRcgzWvBSQ77W90+HkUwUHwBInbMTqJ/wWm3jdY45Mm5eJe+oC+l8uKh0X/QJ5PLz5oRuw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="container">
-        <h1>Is het benauwd buiten?</h1>
-        <label for="locationSelect">Kies een locatie:</label>
-        <select id="locationSelect">
-            <!-- Plaatsnamen worden dynamisch ingevuld -->
+        <h1>Is het benauwd?</h1>
+        <label for="placeSelect">Selecteer plaats:</label>
+        <select id="placeSelect">
+            <!-- Options will be dynamically added here -->
         </select>
         <button onclick="checkHumidity()">Controleer het weer</button>
         <p id="weatherResult"></p>
-        <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        
+        <!-- <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
             <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-        </svg>
+        </svg> -->
 
-        <p id="currentLocation"> <i id="locationIcon" class="fas fa-map-marker-alt"></i> Huidige locatie: <span id="locationName"></span></p>
+        <!-- <p id="currentLocation"> <i id="locationIcon" class="fas fa-map-marker-alt"></i> Huidige locatie: <span id="locationName"></span></p> -->
 
-        <option value="geolocation">Gebruik mijn huidige locatie</option>
+        <div class="container">
+            <option value="geolocation">Gebruik mijn huidige locatie</option>
+        </div>
     </div>
+    <footer>
+        <script src="script.js" defer></script>
+    </footer>
 </body>
 </html>
