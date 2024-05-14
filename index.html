@@ -7,10 +7,16 @@
     <!-- <link rel="stylesheet" href="styles.css"> -->
     <link href="output.css" rel="stylesheet">
 </head>
-<body>
+<body class="relative">
+    <div class="bg-white w-full absolute top-0 py-4 glass-effect text-frost-effect z-50 min-w-sm px-2 py-3 md:py-4 md:px-12 w-full mb-4" style="display: none;">
+        <div class="max-w-screen-lg flex flex-row justify-between mx-auto">
+            <a href="#">ALPHA VERSIE</a>
+            <a href="https://sandervolbeda.com" target="_blank">Project in ontwikkeling!</a>
+        </div>
+    </div>
     <div class="container flex items-center justify-center flex-col">
         <div class="cards max-w-96">
-            <div class="rounded-xl glass-effect text-frost-effect z-50 min-w-sm px-2 py-3 md:py-4 md:px-12 w-full mb-4">
+            <div class="w-full mb-4 text-frost-effect">
                 <h1 class="text-center text-4xl drop-shadow-xl mb-2">Is het benauwd?</h1>
                 <p class="mb-2 text-center">Bekijk of het benauwd is bij jouw in de buurt. Deel je locatie of zoek handmatig op basis van je verblijfplaats.</p>
             </div>
@@ -27,8 +33,8 @@
                     <p id="retryMessage" style="display:none;">Toegang tot locatie geweigerd. Probeer het opnieuw of selecteer handmatig je verblijfplaats.</p>
                 </div>
             </div>
-            <p class="text-center mb-8 text-frost-effect">De benauwd wordt gecontroleerd op basis van actuele data op dit moment.</p>
-            <div class="flex flex-col justify-center w-full z-50 min-w-sm px-10 py-3 md:py-4 md:px-12 rounded-xl glass-effect text-frost-effect">
+            <p class="text-center mb-8 text-frost-effect text-sm">De benauwd wordt gecontroleerd op basis van actuele data op dit moment.</p>
+            <div class="flex flex-col justify-center w-full z-50 min-w-sm px-10 py-3 md:py-4 md:px-12 rounded-xl glass-effect text-frost-effect mb-4">
                 <p class="mb-4">Ben je benieuwd hoe de benauwdheid er voor staat bij een andere locatie?</p>
                 <label for="placeSelect">Selecteer plaats:</label>
                 <select id="placeSelect" class="rounded mb-4" style="height: 40px;">
@@ -36,6 +42,8 @@
                 </select>
                 <button onclick="checkHumidity()" class="rounded">Controleer benauwdheid</button>
             </div>
+            <p class="text-frost-effect text-center text-sm mb-1">Project door <a href="https://sandervolbeda.nl" target="_blank" class="underline">Sander Volbeda</a></p>
+            <p class="text-frost-effect text-center text-xs">Laatste update 14 mei 2024</p>
         </div>
     </div>
     <footer>
