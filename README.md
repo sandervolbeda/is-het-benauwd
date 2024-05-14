@@ -3,3 +3,5 @@
 Install 'npm install' when you start the project
 
 Compile all css: 'npx tailwindcss build styles.css -o output.css'
+
+Run HTTP server 'npm start' to make sure all locations are loaded URL 'http://192.168.2.185:8080/'
