@@ -15,24 +15,32 @@ async function populateDropdown() {
             option.textContent = place;
             placeSelect.appendChild(option);
         });
+
+        initializeChoices(); // Initialize Choices after populating the dropdown
+
+        // Add event listener for place selection change
+        placeSelect.addEventListener('change', function() {
+            const selectedPlace = placeSelect.value;
+            const locationNameElement = document.getElementById('locationName');
+            locationNameElement.textContent = `Locatie: ${selectedPlace}`;
+            checkHumidity(null, null, false); // Update weather info based on new selection
+        });
+
     } catch (error) {
         console.error('Error fetching places:', error);
     }
 }
 
-// Function to display current location
-function displayCurrentLocation(locationName) {
-    const currentLocationParagraph = document.getElementById('currentLocation');
-    const locationIcon = document.getElementById('locationIcon');
-    const locationNameSpan = document.getElementById('locationName');
-    const loadingIcon = document.getElementsByClassName('spinner')[0];
-
-    locationNameSpan.textContent = locationName;
-    locationIcon.style.display = 'inline'; // Show the location icon
-    loadingIcon.style.display = 'none'; // Hide the loading icon
+function initializeChoices() {
+    const placeSelect = document.getElementById('placeSelect');
+    new Choices(placeSelect, {
+        searchEnabled: true,
+        shouldSort: false,
+        placeholderValue: 'Selecteer een plaats',
+        noResultsText: 'Geen resultaten gevonden'
+    });
 }
 
-// Function to check if geolocation is supported and get the user's current position
 function requestLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async function(position) {
@@ -71,12 +79,13 @@ function setDropdownValue(locationName) {
     for (let i = 0; i < options.length; i++) {
         if (options[i].value.toLowerCase() === locationName.toLowerCase()) {
             placeSelect.selectedIndex = i;
+            const event = new Event('change', { bubbles: true });
+            placeSelect.dispatchEvent(event); // Trigger change event for Choices.js
             break;
         }
     }
 }
 
-// Function to check humidity based on coordinates
 function checkHumidity(lat, lon, isGeolocation = false) {
     const loadingSpin = document.getElementById('loadingSpin');
     loadingSpin.style.display = 'block'; // Show the loading spinner
@@ -102,7 +111,11 @@ function checkHumidity(lat, lon, isGeolocation = false) {
 
                 const benauwdheidIndex = determineHumidityLevel(temp, luchtvochtigheid);
                 resultElement.textContent = describeHumidityLevel(benauwdheidIndex);
-                locationNameElement.textContent = `Locatie: ${weerdata.plaats}`; // Display location name
+                if (!isGeolocation) {
+                    locationNameElement.textContent = `Locatie: ${location}`; // Display location name
+                } else {
+                    locationNameElement.textContent = `Locatie: ${data.liveweer[0].plaats}`; // Display location name
+                }
 
                 loadingSpin.style.display = 'none'; // Hide the loading spinner
             } else {
@@ -117,11 +130,7 @@ function checkHumidity(lat, lon, isGeolocation = false) {
         });
 }
 
-// Function to determine the humidity level
 function determineHumidityLevel(temperature, humidity) {
-    // Logic to determine humidity level based on temperature and humidity
-    // You can define your own logic here
-    // For example:
     if (humidity > 70) {
         return 'high';
     } else if (humidity > 50) {
@@ -131,11 +140,7 @@ function determineHumidityLevel(temperature, humidity) {
     }
 }
 
-// Function to describe the humidity level to the user
 function describeHumidityLevel(humidityLevel) {
-    // Logic to describe humidity level to the user
-    // You can define your own descriptions here
-    // For example:
     switch (humidityLevel) {
         case 'high':
             return 'Pas op! Het is erg benauwd buiten.';

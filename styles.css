@@ -6,7 +6,7 @@ body {
     background-image: url('/images/background/rainforest.jpg');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;  
+    background-repeat: no-repeat;   
     color: #0b0b0bba !important; 
     margin: 0;
     display: flex; 

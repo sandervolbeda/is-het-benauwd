@@ -6,6 +6,11 @@
     <title>Is het benauwd buiten?</title>
     <!-- <link rel="stylesheet" href="styles.css"> -->
     <link href="output.css" rel="stylesheet">
+    <!-- Include Choices.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+
+    <!-- Include Choices.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 </head>
 <body class="relative">
     <div class="bg-white w-full absolute top-0 py-4 glass-effect text-frost-effect z-50 min-w-sm px-2 py-3 md:py-4 md:px-12 w-full mb-4" style="display: none;">
@@ -34,9 +39,9 @@
                 </div>
             </div>
             <p class="text-center mb-8 text-frost-effect text-sm">De benauwd wordt gecontroleerd op basis van actuele data op dit moment.</p>
-            <div class="flex flex-col justify-center w-full z-50 min-w-sm px-10 py-3 md:py-4 md:px-12 rounded-xl glass-effect text-frost-effect mb-4">
-                <p class="mb-4">Ben je benieuwd hoe de benauwdheid er voor staat bij een andere locatie?</p>
-                <label for="placeSelect">Selecteer plaats:</label>
+            <div class="flex flex-col justify-center w-full z-50 min-w-sm px-10 py-3 md:py-4 md:px-12 rounded-xl glass-effect mb-4">
+                <p class="mb-4 text-frost-effect">Ben je benieuwd hoe de benauwdheid er voor staat bij een andere locatie?</p>
+                <label for="placeSelect" class="text-frost-effect">Selecteer plaats:</label>
                 <select id="placeSelect" class="rounded mb-4" style="height: 40px;">
                     <!-- Options will be dynamically added here -->
                 </select>
@@ -47,6 +52,8 @@
         </div>
     </div>
     <footer>
+         <!-- Include Select2 JS -->
+         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="script.js" defer></script>
     </footer>
 </body>
