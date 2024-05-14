@@ -8,7 +8,7 @@
     "http-server": "^14.1.1"
   },
   "scripts": {
-    "start": "http-server .",
+    "start": "http-server -S -C cert.pem -K key.pem -p 443 .",
     "watch:css": "npx tailwindcss build styles.css -o output.css --watch"
   }
 }
