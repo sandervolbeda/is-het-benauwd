@@ -554,8 +554,92 @@ video {
   --tw-contain-style:  ;
 }
 
+.container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+.flex {
+  display: flex;
+}
+
+.max-w-96 {
+  max-width: 24rem;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
 body {
-  background: #f9f9f9;
+  background-image: url('/images/background/rainforest.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: #0f0f0f;
   margin: 0;
   display: flex;
@@ -563,6 +647,7 @@ body {
   align-items: center;
   padding-top: 80px;
   font-family: 'Arial', sans-serif;
+  min-height: 100vh;
 }
 
 .container {
@@ -570,6 +655,21 @@ body {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.icon--frosted {
+  fill: rgba(255, 252, 252, 0.8);
+}
+
+.text-frost-effect {
+  color: rgba(255, 252, 252, 0.8);
+}
+
+.glass-effect {
+  background-color: #ffffff10;
+  -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 252, 252, 0.18);
 }
 
 button {
@@ -591,3 +691,74 @@ input[type="text"] {
   width: 300px;
   font-size: 16px;
 }
+
+.spinner {
+  animation: rotator 1.4s linear infinit e;
+}
+
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(270deg);
+  }
+}
+
+.path {
+  stroke-dasharray: 187;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+}
+
+@keyframes colors {
+  0% {
+    stroke: #4285F4;
+  }
+
+  25% {
+    stroke: #DE3E35;
+  }
+
+  50% {
+    stroke: #F7C223;
+  }
+
+  75% {
+    stroke: #1B9A59;
+  }
+
+  100% {
+    stroke: #4285F4;
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 187;
+  }
+
+  50% {
+    stroke-dashoffset: 47;
+    transform:rotate(135deg);
+  }
+
+  100% {
+    stroke-dashoffset: 187;
+    transform:rotate(450deg);
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:px-12 {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  .md\:py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+} 
