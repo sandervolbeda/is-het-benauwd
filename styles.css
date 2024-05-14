@@ -3,14 +3,18 @@
 @import 'tailwindcss/utilities';
 
 body {
-    background: #f9f9f9;
-    color: #0f0f0f;
+    background-image: url('/images/background/rainforest.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;  
+    color: #0f0f0f; 
     margin: 0;
-    display: flex;
+    display: flex; 
     flex-direction: column;
-    align-items: center;
-    padding-top: 80px;
+    align-items: center;  
+    padding-top: 80px; 
     font-family: 'Arial', sans-serif;
+    min-height: 100vh;
 }
 
 .container {
@@ -18,6 +22,20 @@ body {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.icon--frosted {
+    fill: rgba(255, 252, 252, 0.8);
+}
+
+.text-frost-effect {
+    color: rgba(255, 252, 252, 0.8);
+}
+
+.glass-effect {
+    background-color: #ffffff10;
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 252, 252, 0.18);
 }
 
 button {
@@ -37,11 +55,11 @@ input[type="text"] {
     padding: 10px;
     margin: 10px 0;
     width: 300px;
-    font-size: 16px;
+    font-size: 16px;  
 }
 
 .spinner {
-    animation: rotator 1.4s linear infinite;
+    animation: rotator 1.4s linear infinit e;
 }
 
 @keyframes rotator {
@@ -55,11 +73,11 @@ input[type="text"] {
     transform-origin: center;
     animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
 }
-
+ 
 @keyframes colors {
     0% { stroke: #4285F4; }
     25% { stroke: #DE3E35; }
-    50% { stroke: #F7C223; }
+    50% { stroke: #F7C223; }  
     75% { stroke: #1B9A59; }
     100% { stroke: #4285F4; }
 }
@@ -68,4 +86,4 @@ input[type="text"] {
     0% { stroke-dashoffset: 187; }
     50% { stroke-dashoffset: 47; transform:rotate(135deg); }
     100% { stroke-dashoffset: 187; transform:rotate(450deg); }
-}
+} 
