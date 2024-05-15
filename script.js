@@ -5,6 +5,13 @@ document.addEventListener('DOMContentLoaded', function() {
     populateDropdown();
     setGradient(); // Set initial gradient when the DOM content is loaded
     setInterval(setGradient, 3600000); // Update gradient every hour
+
+    // Add event listener to the changeLocation span
+    document.getElementById('changeLocation').addEventListener('click', function() {
+        document.getElementById('locationName').style.display = 'none';
+        document.getElementById('dropdownContainer').style.display = 'block';
+        this.style.display = 'none'; // Hide the span
+    });    
 });
 
 async function populateDropdown() {
@@ -86,7 +93,10 @@ async function getLocationName(lat, lon) {
 
 function checkHumidity(lat, lon, isGeolocation = false) {
     const loadingSpin = document.getElementById('loadingSpin');
-    loadingSpin.style.display = 'block'; // Show the loading spinner
+    const resultElement = document.getElementById('weatherResult');
+    
+    loadingSpin.style.display = 'flex'; // Show the loading spinner
+    resultElement.style.display = 'none'; // Hide the weather result
 
     let location;
     if (isGeolocation) {
@@ -100,29 +110,35 @@ function checkHumidity(lat, lon, isGeolocation = false) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            if (data.liveweer && data.liveweer.length > 0) {
-                const weerdata = data.liveweer[0];
-                const temp = parseInt(weerdata.temp);
-                const luchtvochtigheid = parseInt(weerdata.lv);
-                const resultElement = document.getElementById('weatherResult');
-                const locationNameElement = document.getElementById('locationName');
+            setTimeout(() => { // Add a delay of 1 second before displaying the data
+                if (data.liveweer && data.liveweer.length > 0) {
+                    const weerdata = data.liveweer[0];
+                    const temp = parseInt(weerdata.temp);
+                    const luchtvochtigheid = parseInt(weerdata.lv);
+                    const locationNameElement = document.getElementById('locationName');
 
-                const benauwdheidIndex = determineHumidityLevel(temp, luchtvochtigheid);
-                resultElement.textContent = describeHumidityLevel(benauwdheidIndex);
-                locationNameElement.textContent = `Locatie: ${isGeolocation ? data.liveweer[0].plaats : location}`; // Display location name
+                    const benauwdheidIndex = determineHumidityLevel(temp, luchtvochtigheid);
+                    resultElement.textContent = describeHumidityLevel(benauwdheidIndex);
+                    locationNameElement.textContent = `Locatie: ${isGeolocation ? data.liveweer[0].plaats : location}`; // Display location name
 
-                loadingSpin.style.display = 'none'; // Hide the loading spinner
-            } else {
-                document.getElementById('weatherResult').textContent = 'Geen weergegevens gevonden.';
-                loadingSpin.style.display = 'none'; // Hide the loading spinner
-            }
+                    loadingSpin.style.display = 'none'; // Hide the loading spinner
+                    resultElement.style.display = 'block'; // Show the weather result
+                } else {
+                    resultElement.textContent = 'Geen weergegevens gevonden.';
+                    loadingSpin.style.display = 'none'; // Hide the loading spinner
+                    resultElement.style.display = 'block'; // Show the weather result
+                }
+            }, 1000); // 1 second delay
         })
         .catch(error => {
             console.error('Error fetching the weather data:', error);
-            document.getElementById('weatherResult').textContent = 'Fout bij het ophalen van de weergegevens.';
+            resultElement.textContent = 'Fout bij het ophalen van de weergegevens.';
             loadingSpin.style.display = 'none'; // Hide the loading spinner
+            resultElement.style.display = 'block'; // Show the weather result
         });
 }
+
+
 
 function determineHumidityLevel(temperature, humidity) {
     if (humidity > 70) {
@@ -179,4 +195,4 @@ function setGradient() {
     }
 
     document.body.style.background = gradient; 
-} 
+}

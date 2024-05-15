@@ -682,6 +682,10 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.p-10 {
+  padding: 2.5rem;
+}
+
 .px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
@@ -783,7 +787,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
-#placeSelect {
+.choices {
   color:#0f0f0f;
   padding: 8px 4px;
 }
@@ -896,6 +900,10 @@ input[type="text"] {
 }
 
 @media (min-width: 768px) {
+  .md\:p-12 {
+    padding: 3rem;
+  }
+
   .md\:px-12 {
     padding-left: 3rem;
     padding-right: 3rem;
