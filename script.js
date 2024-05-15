@@ -153,26 +153,26 @@ function setGradient() {
     let gradient;
 
     if (hours >= 5 && hours < 8) {
-        // Early Morning: Pink to Light Blue
-        gradient = 'linear-gradient(to bottom, #FFDEE9, #87CEEB)';
+        // Early Morning: Dark Pink to Peach
+        gradient = 'linear-gradient(to bottom, #ffb3ba, #ffdfba)';
     } else if (hours >= 8 && hours < 10) {
         // Morning: Blue to Yellow
-        gradient = 'linear-gradient(to bottom, #87CEEB, #FFD700)';
+        gradient = 'linear-gradient(to bottom, #00a8ff, #ffd700)';
     } else if (hours >= 10 && hours < 12) {
         // Late Morning: Yellow to Light Yellow
-        gradient = 'linear-gradient(to bottom, #FFD700, #FAFAD2)';
+        gradient = 'linear-gradient(to bottom, #ffbb00, #ffd700)';
     } else if (hours >= 12 && hours < 15) {
         // Early Afternoon: Light Blue to Bright Blue
-        gradient = 'linear-gradient(to bottom, #ADD8E6, #89F7FE)';
+        gradient = 'linear-gradient(to bottom, #0072ff, #89f7fe)';
     } else if (hours >= 15 && hours < 18) {
         // Afternoon: Light Blue to Light Yellow
-        gradient = 'linear-gradient(to bottom, #ADD8E6, #FAFAD2)';
+        gradient = 'linear-gradient(to bottom, #0072ff, #faaf40)';
     } else if (hours >= 18 && hours < 20) {
         // Early Evening: Pink to Orange
-        gradient = 'linear-gradient(to bottom, #FF69B4, #FF4500)';
+        gradient = 'linear-gradient(to bottom, #ff616f, #ff8a5c)';
     } else if (hours >= 20 && hours < 22) {
         // Evening: Orange to Pink
-        gradient = 'linear-gradient(to bottom, #FF4500, #FF69B4)';
+        gradient = 'linear-gradient(to bottom, #ff8a5c, #ff616f)';
     } else {
         // Night: Dark Purple to Pinkish
         gradient = 'linear-gradient(to bottom, #2E0854, #191654)';
