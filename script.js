@@ -220,9 +220,10 @@ function checkHumidity(lat, lon, isGeolocation = false) {
     const resultElement = document.getElementById('weatherResult');
     const scoreElement = document.getElementById('weatherScore');
     const weatherDescription = document.getElementById('weatherDescription');
+    const weatherImageContainer = document.getElementById('weatherImageContainer');
     
     // Check if elements exist
-    if (!loadingSpin || !resultElement || !scoreElement || !weatherDescription) {
+    if (!loadingSpin || !resultElement || !scoreElement || !weatherDescription || !weatherImageContainer) {
         console.error('One or more elements not found in the DOM');
         return;
     }
@@ -275,6 +276,14 @@ function checkHumidity(lat, lon, isGeolocation = false) {
                 // Set the weather description
                 weatherDescription.textContent = `${weatherSummary}`;
                 weatherDescription.style.display = 'block'; // Show the weather description
+
+                if (weatherSummary.includes('onbewolkt') || weatherSummary.includes('zonnig')) {
+                    document.querySelector('#weatherImageContainer img[alt="sun"]').style.display = 'block';
+                } else if (weatherSummary.includes('regen') || weatherSummary.includes('motregen')) {
+                    document.querySelector('#weatherImageContainer img[alt="rain"]').style.display = 'block';
+                } else {
+                    document.querySelector('#weatherImageContainer img[alt="cloud"]').style.display = 'block';
+                }
 
                 loadingSpin.style.display = 'none'; // Hide the loading spinner
                 resultElement.style.display = 'block'; // Show the weather result
