@@ -1,4 +1,5 @@
 let choices;
+let sunriseTime, sunsetTime, sunriseEndTime, sunsetEndTime;
 
 document.addEventListener('DOMContentLoaded', function() {
     requestLocation();
@@ -84,6 +85,51 @@ function setDropdownValue(locationName) {
     }
 }
 
+async function getSunTimes(lat, lon) {
+    const apiKey = '7f809748ab'; // Your API key here
+    const url = `https://weerlive.nl/api/weerlive_api_v2.php?key=${apiKey}&locatie=${lat},${lon}&format=json`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.liveweer && data.liveweer.length > 0) {
+            sunriseTime = new Date(data.liveweer[0].sup);
+            sunsetTime = new Date(data.liveweer[0].sunder);
+            sunriseEndTime = new Date(sunriseTime.getTime() + 3600000); // Assuming sunrise lasts 1 hour
+            sunsetEndTime = new Date(sunsetTime.getTime() + 3600000); // Assuming sunset lasts 1 hour
+        }
+    } catch (error) {
+        console.error('Error fetching sun times:', error);
+    }
+}
+
+function setGradient() {
+    const now = new Date();
+
+    let gradient;
+
+    if (sunriseTime && sunsetTime) {
+        if (now >= sunriseTime && now < sunriseEndTime) {
+            // Sunrise: #859FB1, #D0C8BB, #FFA53E
+            gradient = 'linear-gradient(to bottom, #859FB1, #D0C8BB, #FFA53E)';
+        } else if (now >= sunriseEndTime && now < sunsetTime) {
+            // Day: #0C8AD7, #5CA6DD, #83ACE1
+            gradient = 'linear-gradient(to bottom, #0C8AD7, #5CA6DD, #83ACE1)';
+        } else if (now >= sunsetTime && now < sunsetEndTime) {
+            // Sunset: #625A8A, #B093BD, #FF9F77
+            gradient = 'linear-gradient(to bottom, #625A8A, #B093BD, #FF9F77)';
+        } else {
+            // Night: #25282E, #22384F, #1C526A
+            gradient = 'linear-gradient(to bottom, #25282E, #22384F, #1C526A)';
+        }
+    } else {
+        // Default gradient if sun times are not available
+        gradient = 'linear-gradient(to bottom, #25282E, #22384F, #1C526A)';
+    }
+
+    document.body.style.background = gradient; 
+}
+
 function requestLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async function(position) {
@@ -91,6 +137,7 @@ function requestLocation() {
             const lon = position.coords.longitude;
             console.log(`Latitude: ${lat}, Longitude: ${lon}`); // Log the user's location to the console
 
+            await getSunTimes(lat, lon); // Fetch sunrise and sunset times
             const locationName = await getLocationName(lat, lon);
             setDropdownValue(locationName); // Set the dropdown value to the detected location
             checkHumidity(lat, lon, true); // Call checkHumidity function with coordinates and indicate it's a geolocation request
@@ -244,39 +291,4 @@ function checkHumidity(lat, lon, isGeolocation = false) {
             loadingSpin.style.display = 'none'; // Hide the loading spinner
             resultElement.style.display = 'block'; // Show the weather result
         });
-}
-
-
-function setGradient() {
-    const now = new Date();
-    const hours = now.getHours();
-    let gradient;
-
-    if (hours >= 5 && hours < 8) {
-        // Early Morning: Dark Pink to Peach
-        gradient = 'linear-gradient(to bottom, #ffb3ba, #ffdfba)';
-    } else if (hours >= 8 && hours < 10) {
-        // Morning: Blue to Yellow
-        gradient = 'linear-gradient(to bottom, #00a8ff, #ffd700)';
-    } else if (hours >= 10 && hours < 12) {
-        // Late Morning: Yellow to Light Yellow
-        gradient = 'linear-gradient(to bottom, #ffbb00, #ffd700)';
-    } else if (hours >= 12 && hours < 15) {
-        // Early Afternoon: Light Blue to Bright Blue
-        gradient = 'linear-gradient(to bottom, #0072ff, #89f7fe)';
-    } else if (hours >= 15 && hours < 18) {
-        // Afternoon: Light Blue to Light Yellow
-        gradient = 'linear-gradient(to bottom, #0072ff, #faaf40)';
-    } else if (hours >= 18 && hours < 20) {
-        // Early Evening: Pink to Orange
-        gradient = 'linear-gradient(to bottom, #ff616f, #ff8a5c)';
-    } else if (hours >= 20 && hours < 22) {
-        // Evening: Orange to Pink
-        gradient = 'linear-gradient(to bottom, #ff8a5c, #ff616f)';
-    } else {
-        // Night: Dark Purple to Pinkish
-        gradient = 'linear-gradient(to bottom, #2E0854, #191654)';
-    }
-
-    document.body.style.background = gradient; 
 }
