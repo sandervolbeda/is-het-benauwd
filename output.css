@@ -900,6 +900,62 @@ input[type="text"] {
   }
 }
 
+@keyframes moveImage {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(5px, 0);
+  }
+
+  50% {
+    transform: translate(5px, 5px);
+  }
+
+  75% {
+    transform: translate(0, 5px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes brightness {
+  0% {
+    filter: brightness(100%);
+  }
+
+  50% {
+    filter: brightness(105%);
+  }
+
+  100% {
+    filter: brightness(100%);
+  }
+}
+
+.animate-image {
+  animation: pulse 20s infinite, 
+               brightness 5s infinite alternate;
+  position: relative;
+}
+
 @media (min-width: 768px) {
   .md\:p-12 {
     padding: 3rem;
@@ -914,4 +970,4 @@ input[type="text"] {
     padding-top: 1rem;
     padding-bottom: 1rem;
   }
-} 
+}
