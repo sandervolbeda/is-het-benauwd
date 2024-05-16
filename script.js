@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Voeg deze regel toe om de tijd en datum direct te initialiseren
     updateTimeAndDate();
 
-    // Voeg deze regel toe om de tijd elke seconde te updaten
-    setInterval(updateTimeAndDate, 1000); 
+    // Voeg deze regel toe om de tijd elke minuut te updaten
+    setInterval(updateTimeAndDate, 60000);
 
     // Add event listener to the changeLocation span
     const changeLocation = document.getElementById('changeLocation');
@@ -116,63 +116,6 @@ async function getLocationName(lat, lon) {
     }
 }
 
-function checkHumidity(lat, lon, isGeolocation = false) {
-    const loadingSpin = document.getElementById('loadingSpin');
-    const resultElement = document.getElementById('weatherResult');
-    const scoreElement = document.getElementById('weatherScore');
-    
-    loadingSpin.style.display = 'flex'; // Show the loading spinner
-    resultElement.style.display = 'none'; // Hide the weather result
-    scoreElement.style.display = 'none'; // Hide the weather score
-
-    let location;
-    if (isGeolocation) {
-        location = `${lat},${lon}`; // Use coordinates if it's a geolocation request
-    } else {
-        location = document.getElementById('placeSelect').value;
-    }
-    const apiKey = '7f809748ab'; // Your API key here
-    const url = `https://weerlive.nl/api/weerlive_api_v2.php?key=${apiKey}&locatie=${encodeURIComponent(location)}&format=json`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data.liveweer && data.liveweer.length > 0) {
-                const weerdata = data.liveweer[0];
-                const temp = parseInt(weerdata.temp);
-                const humidity = parseInt(weerdata.lv);
-                const pressure = parseInt(weerdata.luchtd);
-                const windSpeed = parseInt(weerdata.windkmh);
-                const rainChance = weerdata.neersl_perc_dag ? parseInt(weerdata.neersl_perc_dag) : 0; // Fallback to 0 if rainChance is not available
-
-                console.log(`Temp: ${temp}, Humidity: ${humidity}, Pressure: ${pressure}, Wind Speed: ${windSpeed}, Rain Chance: ${rainChance}`);
-                
-                const breathlessnessIndex = calculateBreathlessnessIndex(temp, humidity, pressure, windSpeed, rainChance);
-                const description = describeBreathlessnessLevel(breathlessnessIndex);
-
-                resultElement.textContent = description;
-                scoreElement.textContent = `Score: ${breathlessnessIndex}`;
-
-                const locationNameElement = document.getElementById('locationName');
-                locationNameElement.textContent = `Locatie: ${isGeolocation ? data.liveweer[0].plaats : location}`; // Display location name
-
-                loadingSpin.style.display = 'none'; // Hide the loading spinner
-                resultElement.style.display = 'block'; // Show the weather result
-                scoreElement.style.display = 'block'; // Show the weather score
-            } else {
-                resultElement.textContent = 'Geen weergegevens gevonden.';
-                loadingSpin.style.display = 'none'; // Hide the loading spinner
-                resultElement.style.display = 'block'; // Show the weather result
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching the weather data:', error);
-            resultElement.textContent = 'Fout bij het ophalen van de weergegevens.';
-            loadingSpin.style.display = 'none'; // Hide the loading spinner
-            resultElement.style.display = 'block'; // Show the weather result
-        });
-}
-
 function calculateBreathlessnessIndex(temp, humidity, pressure, windSpeed, rainChance) {
     // Normaliseer de waarden tussen 0 en 1
     const normalizedTemp = (temp - 10) / 30; // Assuming temp ranges from 10 to 40 degrees Celsius
@@ -210,31 +153,99 @@ function calculateBreathlessnessIndex(temp, humidity, pressure, windSpeed, rainC
 }
 
 function describeBreathlessnessLevel(index) {
-    switch(index) {
-        case 1:
-            return 'Geen benauwdheid.';
-        case 2:
-            return 'Bijna geen benauwdheid.';
-        case 3:
-            return 'Zeer milde benauwdheid.';
-        case 4:
-            return 'Milde benauwdheid.';
-        case 5:
-            return 'Lichte benauwdheid.';
-        case 6:
-            return 'Matige benauwdheid.';
-        case 7:
-            return 'Redelijke benauwdheid.';
-        case 8:
-            return 'Ernstige benauwdheid.';
-        case 9:
-            return 'Zeer ernstige benauwdheid.';
-        case 10:
-            return 'Extreme benauwdheid.';
-        default:
-            return 'Geen resultaat';
+    if (index <= 2) {
+        return 'Geen benauwdheid.';
+    } else if (index <= 4) {
+        return 'Milde benauwdheid.';
+    } else if (index <= 6) {
+        return 'Matige benauwdheid.';
+    } else if (index <= 8) {
+        return 'Ernstige benauwdheid.';
+    } else if (index <= 10) {
+        return 'Extreme benauwdheid.';
+    } else {
+        return 'Geen resultaat';
     }
 }
+
+function checkHumidity(lat, lon, isGeolocation = false) {
+    const loadingSpin = document.getElementById('loadingSpin');
+    const resultElement = document.getElementById('weatherResult');
+    const scoreElement = document.getElementById('weatherScore');
+    const weatherDescription = document.getElementById('weatherDescription');
+    
+    // Check if elements exist
+    if (!loadingSpin || !resultElement || !scoreElement || !weatherDescription) {
+        console.error('One or more elements not found in the DOM');
+        return;
+    }
+
+    loadingSpin.style.display = 'flex'; // Show the loading spinner
+    resultElement.style.display = 'none'; // Hide the weather result
+    scoreElement.style.display = 'none'; // Hide the weather score
+    weatherDescription.style.display = 'none'; // Hide the weather description
+
+    let location;
+    if (isGeolocation) {
+        location = `${lat},${lon}`; // Use coordinates if it's a geolocation request
+    } else {
+        location = document.getElementById('placeSelect').value;
+    }
+    const apiKey = '7f809748ab'; // Your API key here
+    const url = `https://weerlive.nl/api/weerlive_api_v2.php?key=${apiKey}&locatie=${encodeURIComponent(location)}&format=json`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('API response:', data); // Log the full API response
+            if (data.liveweer && data.liveweer.length > 0) {
+                const weerdata = data.liveweer[0];
+                const temp = parseInt(weerdata.temp);
+                const humidity = parseInt(weerdata.lv);
+                const pressure = parseInt(weerdata.luchtd);
+                const windSpeed = parseInt(weerdata.windkmh);
+                const rainChance = weerdata.neersl_perc_dag ? parseInt(weerdata.neersl_perc_dag) : 0; // Fallback to 0 if rainChance is not available
+                const weatherSummary = weerdata.samenv; // Get the weather summary
+
+                console.log(`Temp: ${temp}, Humidity: ${humidity}, Pressure: ${pressure}, Wind Speed: ${windSpeed}, Rain Chance: ${rainChance}, Summary: ${weatherSummary}`);
+                
+                const breathlessnessIndex = calculateBreathlessnessIndex(temp, humidity, pressure, windSpeed, rainChance);
+                const description = describeBreathlessnessLevel(breathlessnessIndex);
+
+                resultElement.textContent = description;
+                scoreElement.textContent = `Score: ${breathlessnessIndex}`;
+
+                const locationNameElement = document.getElementById('locationName');
+                if (locationNameElement) {
+                    locationNameElement.textContent = `Locatie: ${isGeolocation ? data.liveweer[0].plaats : location}`; // Display location name
+                }
+
+                // Set the weather description
+                weatherDescription.textContent = `${weatherSummary}`;
+                weatherDescription.style.display = 'block'; // Show the weather description
+
+                loadingSpin.style.display = 'none'; // Hide the loading spinner
+                resultElement.style.display = 'block'; // Show the weather result
+                scoreElement.style.display = 'block'; // Show the weather score
+            } else {
+                resultElement.textContent = 'Geen weergegevens gevonden.';
+                loadingSpin.style.display = 'none'; // Hide the loading spinner
+                resultElement.style.display = 'block'; // Show the weather result
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching the weather data:', error);
+            resultElement.textContent = 'Fout bij het ophalen van de weergegevens.';
+            loadingSpin.style.display = 'none'; // Hide the loading spinner
+            resultElement.style.display = 'block'; // Show the weather result
+        });
+}
+
 
 function setGradient() {
     const now = new Date();
