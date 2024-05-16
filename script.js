@@ -7,11 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(setGradient, 3600000); // Update gradient every hour
 
     // Add event listener to the changeLocation span
-    document.getElementById('changeLocation').addEventListener('click', function() {
-        document.getElementById('locationName').style.display = 'none';
-        document.getElementById('dropdownContainer').style.display = 'block';
-        this.style.display = 'none'; // Hide the span
-    });    
+    const changeLocation = document.getElementById('changeLocation');
+    if (changeLocation) {
+        changeLocation.addEventListener('click', function() {
+            document.getElementById('locationName').style.display = 'none';
+            document.getElementById('dropdownContainer').style.display = 'block';
+            this.style.display = 'none'; // Hide the span
+        });
+    }
 });
 
 async function populateDropdown() {
@@ -44,12 +47,14 @@ async function populateDropdown() {
 
 function initializeChoices() {
     const placeSelect = document.getElementById('placeSelect');
-    choices = new Choices(placeSelect, {
-        searchEnabled: true,
-        shouldSort: false,
-        placeholderValue: 'Selecteer een plaats',
-        noResultsText: 'Geen resultaten gevonden'
-    });
+    if (placeSelect) {
+        choices = new Choices(placeSelect, {
+            searchEnabled: true,
+            shouldSort: false,
+            placeholderValue: 'Selecteer een plaats',
+            noResultsText: 'Geen resultaten gevonden'
+        });
+    }
 }
 
 function setDropdownValue(locationName) {
@@ -91,6 +96,58 @@ async function getLocationName(lat, lon) {
     }
 }
 
+function calculateBreathlessnessIndex(temp, humidity, pressure, windSpeed, rainChance) {
+    // Controleer en normaliseer de waarden tussen 0 en 1
+    const normalizedTemp = (temp - 10) / 30; // Assuming temp ranges from 10 to 40 degrees Celsius
+    const normalizedHumidity = humidity / 100; // Humidity as a percentage
+    const normalizedPressure = (pressure - 950) / 100; // Assuming pressure ranges from 950 to 1050 hPa
+    const normalizedWindSpeed = windSpeed / 20; // Assuming windSpeed ranges from 0 to 20 km/h
+    const normalizedRainChance = !isNaN(rainChance) ? rainChance / 100 : 0; // Rain chance as a percentage
+
+    console.log(`Temp: ${temp}, Normalized Temp: ${normalizedTemp}`);
+    console.log(`Humidity: ${humidity}, Normalized Humidity: ${normalizedHumidity}`);
+    console.log(`Pressure: ${pressure}, Normalized Pressure: ${normalizedPressure}`);
+    console.log(`Wind Speed: ${windSpeed}, Normalized Wind Speed: ${normalizedWindSpeed}`);
+    console.log(`Rain Chance: ${rainChance}, Normalized Rain Chance: ${normalizedRainChance}`);
+
+    // Geef gewichten aan elke parameter
+    const weightTemp = 0.4;
+    const weightHumidity = 0.3;
+    const weightPressure = 0.1;
+    const weightWindSpeed = 0.1;
+    const weightRainChance = 0.1;
+
+    // Bereken de gewogen som
+    const index = (normalizedTemp * weightTemp) +
+                  (normalizedHumidity * weightHumidity) +
+                  ((1 - normalizedPressure) * weightPressure) + // Lower pressure means higher breathlessness
+                  ((1 - normalizedWindSpeed) * weightWindSpeed) + // Higher wind speed means lower breathlessness
+                  ((1 - normalizedRainChance) * weightRainChance); // Higher rain chance means lower breathlessness
+
+    console.log(`Calculated Index: ${index}`);
+
+    // Schaal de index naar een schaal van 1 tot 10
+    const scaledIndex = Math.round(index * 10);
+    console.log(`Scaled Index: ${scaledIndex}`);
+    return scaledIndex;
+}
+
+function describeBreathlessnessLevel(index) {
+    if (index <= 2) {
+        return 'Geen benauwdheid.';
+    } else if (index <= 4) {
+        return 'Milde benauwdheid.';
+    } else if (index <= 6) {
+        return 'Matige benauwdheid.';
+    } else if (index <= 8) {
+        return 'Ernstige benauwdheid.';
+    } else if (index <= 10) {
+        return 'Extreme benauwdheid.';
+    } else {
+        return 'Geen resultaat';
+    }
+}
+
 function checkHumidity(lat, lon, isGeolocation = false) {
     const loadingSpin = document.getElementById('loadingSpin');
     const resultElement = document.getElementById('weatherResult');
@@ -114,11 +171,17 @@ function checkHumidity(lat, lon, isGeolocation = false) {
                 if (data.liveweer && data.liveweer.length > 0) {
                     const weerdata = data.liveweer[0];
                     const temp = parseInt(weerdata.temp);
-                    const luchtvochtigheid = parseInt(weerdata.lv);
-                    const locationNameElement = document.getElementById('locationName');
+                    const humidity = parseInt(weerdata.lv);
+                    const pressure = parseInt(weerdata.luchtd);
+                    const windSpeed = parseInt(weerdata.windkmh);
+                    const rainChance = parseInt(weerdata.neersl_perc_dag);
 
-                    const benauwdheidIndex = determineHumidityLevel(temp, luchtvochtigheid);
-                    resultElement.textContent = describeHumidityLevel(benauwdheidIndex);
+                    console.log(`Temp: ${temp}, Humidity: ${humidity}, Pressure: ${pressure}, Wind Speed: ${windSpeed}, Rain Chance: ${rainChance}`);
+                    
+                    const breathlessnessIndex = calculateBreathlessnessIndex(temp, humidity, pressure, windSpeed, rainChance);
+                    resultElement.textContent = describeBreathlessnessLevel(breathlessnessIndex);
+
+                    const locationNameElement = document.getElementById('locationName');
                     locationNameElement.textContent = `Locatie: ${isGeolocation ? data.liveweer[0].plaats : location}`; // Display location name
 
                     loadingSpin.style.display = 'none'; // Hide the loading spinner
@@ -136,31 +199,6 @@ function checkHumidity(lat, lon, isGeolocation = false) {
             loadingSpin.style.display = 'none'; // Hide the loading spinner
             resultElement.style.display = 'block'; // Show the weather result
         });
-}
-
-
-
-function determineHumidityLevel(temperature, humidity) {
-    if (humidity > 70) {
-        return 'high';
-    } else if (humidity > 50) {
-        return 'moderate';
-    } else {
-        return 'low';
-    }
-}
-
-function describeHumidityLevel(humidityLevel) {
-    switch (humidityLevel) {
-        case 'high':
-            return 'Pas op! Het is erg benauwd buiten.';
-        case 'moderate':
-            return 'Het is benauwd buiten.';
-        case 'low':
-            return 'Het is niet benauwd.';
-        default:
-            return 'Het is niet benauwd.';
-    }
 }
 
 function setGradient() {
