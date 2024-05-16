@@ -33,7 +33,7 @@
                     <span id="showDate" class="text-xs font-bold" style="font-family: monospace;"></span>
                 </div>
                 <div class="p-10 md:py-4 md:p-12">
-                    <div id="weatherImageContainer">
+                    <div id="weatherImageContainer" style="display: none;">
                         <img src="/images/icons/sun.png" alt="sun" class="animate-image">
                     </div>
                     <div id="weatherDescriptionContainer" clas="">
@@ -61,13 +61,12 @@
                     <span id="changeLocation" class="mt-2 text-sm underline block text-center w-full">Wijzig locatie handmatig</span>
                 </div>
             </div>
-            <p class="text-center mb-8 text-frost-effect text-sm">De benauwdheid wordt gecheckt met actuele data.</p>
-            <p class="text-frost-effect text-center text-sm mb-1">Project door <a href="https://sandervolbeda.nl" target="_blank" class="underline">Sander Volbeda</a></p>
-            <p class="text-frost-effect text-center text-xs">Laatste update 14 mei 2024</p>
         </div>        
     </div>
-    <footer class="text-xs text-center text-frost-effect w-full flex flex-row justify-between px-4">
-        <div>Data van <a href="https://weerlive.nl/" target="_blank" class="underline">Weerlive.nl</a></div>
+    <footer class="text-xs text-center text-frost-effect w-full flex flex-col px-4 justify-center">
+        <p class="text-center mb-8 text-frost-effect text-sm">De benauwdheid wordt gecheckt met actuele data.</p>
+        <p class="text-frost-effect text-center text-xs">Project door <a href="https://sandervolbeda.nl" target="_blank" class="underline">Sander Volbeda</a> | Laatste update 16 mei 2024</p>
+        <p>Data van <a href="https://weerlive.nl/" target="_blank" class="underline">Weerlive.nl</a></p>
         <script src="script.js" defer></script>
     </footer>
 </body>
