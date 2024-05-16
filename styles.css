@@ -39,6 +39,7 @@ h1, h2, h3, h4, h5, h6 {
 .choices {
     color:#0f0f0f; 
     padding: 8px 4px; 
+    text-align: left;
 }
 
 .container {
