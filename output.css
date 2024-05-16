@@ -936,23 +936,33 @@ input[type="text"] {
   }
 }
 
-@keyframes brightness {
+@keyframes skew {
   0% {
-    filter: brightness(100%);
+    transform: skew(0deg, 0deg);
+  }
+
+  25% {
+    transform: skew(2deg, 2deg);
   }
 
   50% {
-    filter: brightness(105%);
+    transform: skew(-2deg, -2deg);
+  }
+
+  75% {
+    transform: skew(2deg, -2deg);
   }
 
   100% {
-    filter: brightness(100%);
+    transform: skew(0deg, 0deg);
   }
 }
 
 .animate-image {
-  animation: pulse 20s infinite, 
-               brightness 5s infinite alternate;
+  animation: moveImage 15s infinite,
+               pulse 20s infinite, 
+               brightness 5s infinite alternate,
+               skew 15s infinite alternate;
   position: relative;
 }
 
