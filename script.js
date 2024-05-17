@@ -1,17 +1,21 @@
 let choices;
 let sunriseTime, sunsetTime, sunriseEndTime, sunsetEndTime;
 
-document.addEventListener('DOMContentLoaded', function() {
-    requestLocation();
-    populateDropdown();
-    setGradient(); // Set initial gradient when the DOM content is loaded
-    setInterval(setGradient, 3600000); // Update gradient every hour
+document.addEventListener('DOMContentLoaded', async function() {
+    // Stel een standaard gradient in
+    setDefaultGradient();
+
+    await requestLocation();
+    await populateDropdown();
 
     // Voeg deze regel toe om de tijd en datum direct te initialiseren
     updateTimeAndDate();
 
     // Voeg deze regel toe om de tijd elke minuut te updaten
     setInterval(updateTimeAndDate, 60000);
+
+    // Voeg deze regel toe om de gradient elk uur bij te werken
+    setInterval(setGradient, 3600000);
 
     // Add event listener to the changeLocation span
     const changeLocation = document.getElementById('changeLocation');
@@ -23,6 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+function setDefaultGradient() {
+    document.body.style.background = 'linear-gradient(to bottom, #25282E, #22384F, #1C526A)';
+}
 
 function updateTimeAndDate() {
     const now = new Date();
@@ -93,10 +101,25 @@ async function getSunTimes(lat, lon) {
         const response = await fetch(url);
         const data = await response.json();
         if (data.liveweer && data.liveweer.length > 0) {
-            sunriseTime = new Date(data.liveweer[0].sup);
-            sunsetTime = new Date(data.liveweer[0].sunder);
+            const sunriseStr = data.liveweer[0].sup;
+            const sunsetStr = data.liveweer[0].sunder;
+
+            // Assuming sunrise and sunset are given in hh:mm format
+            const [sunriseHour, sunriseMinute] = sunriseStr.split(':').map(Number);
+            const [sunsetHour, sunsetMinute] = sunsetStr.split(':').map(Number);
+
+            const today = new Date();
+            sunriseTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), sunriseHour, sunriseMinute);
+            sunsetTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), sunsetHour, sunsetMinute);
             sunriseEndTime = new Date(sunriseTime.getTime() + 3600000); // Assuming sunrise lasts 1 hour
             sunsetEndTime = new Date(sunsetTime.getTime() + 3600000); // Assuming sunset lasts 1 hour
+
+            console.log('Sunrise time:', sunriseTime);
+            console.log('Sunset time:', sunsetTime);
+            console.log('Sunrise end time:', sunriseEndTime);
+            console.log('Sunset end time:', sunsetEndTime);
+
+            setGradient(); // Call setGradient() after fetching sun times
         }
     } catch (error) {
         console.error('Error fetching sun times:', error);
@@ -106,31 +129,42 @@ async function getSunTimes(lat, lon) {
 function setGradient() {
     const now = new Date();
 
+    console.log('Current time:', now);
+    console.log('Sunrise time:', sunriseTime);
+    console.log('Sunrise end time:', sunriseEndTime);
+    console.log('Sunset time:', sunsetTime);
+    console.log('Sunset end time:', sunsetEndTime);
+
     let gradient;
 
     if (sunriseTime && sunsetTime) {
         if (now >= sunriseTime && now < sunriseEndTime) {
+            console.log('Setting gradient for Sunrise');
             // Sunrise: #859FB1, #D0C8BB, #FFA53E
             gradient = 'linear-gradient(to bottom, #859FB1, #D0C8BB, #FFA53E)';
         } else if (now >= sunriseEndTime && now < sunsetTime) {
+            console.log('Setting gradient for Day');
             // Day: #0C8AD7, #5CA6DD, #83ACE1
             gradient = 'linear-gradient(to bottom, #0C8AD7, #5CA6DD, #83ACE1)';
         } else if (now >= sunsetTime && now < sunsetEndTime) {
-            // Sunset: #625A8A, #B093BD, #FF9F77
+            console.log('Setting gradient for Sunset');
+            // Sunset: #625A8A, #B093BD, #FF9F77'
             gradient = 'linear-gradient(to bottom, #625A8A, #B093BD, #FF9F77)';
         } else {
+            console.log('Setting gradient for Night');
             // Night: #25282E, #22384F, #1C526A
             gradient = 'linear-gradient(to bottom, #25282E, #22384F, #1C526A)';
         }
     } else {
+        console.log('Setting default gradient');
         // Default gradient if sun times are not available
         gradient = 'linear-gradient(to bottom, #25282E, #22384F, #1C526A)';
     }
 
-    document.body.style.background = gradient; 
+    document.body.style.background = gradient;
 }
 
-function requestLocation() {
+async function requestLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async function(position) {
             const lat = position.coords.latitude;
