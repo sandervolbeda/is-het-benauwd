@@ -277,7 +277,17 @@ function checkHumidity(lat, lon, isGeolocation = false) {
                 weatherDescription.textContent = `${weatherSummary}`;
                 weatherDescription.style.display = 'block'; // Show the weather description
 
-                if (weatherSummary.includes('onbewolkt') || weatherSummary.includes('zonnig')) {
+                // Show relevant image based on weather summary and time of day
+                document.querySelectorAll('#weatherImageContainer img').forEach(img => {
+                    img.style.display = 'none';
+                });
+
+                const now = new Date();
+                const currentTime = now.getTime();
+                if (currentTime >= sunsetTime.getTime() || currentTime < sunriseTime.getTime()) {
+                    // Show moon image if it's night time (overruling other images)
+                    document.querySelector('#weatherImageContainer img[alt="moon"]').style.display = 'block';
+                } else if (weatherSummary.includes('onbewolkt') || weatherSummary.includes('zonnig')) {
                     document.querySelector('#weatherImageContainer img[alt="sun"]').style.display = 'block';
                 } else if (weatherSummary.includes('regen') || weatherSummary.includes('motregen')) {
                     document.querySelector('#weatherImageContainer img[alt="rain"]').style.display = 'block';
