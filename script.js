@@ -3,7 +3,12 @@ let sunriseTime, sunsetTime, sunriseEndTime, sunsetEndTime;
 
 document.addEventListener('DOMContentLoaded', async function() {
     // Stel een standaard gradient in
-    setDefaultGradient();
+    document.body.className = 'night-gradient';
+    const gradientOverlay = document.getElementById('gradient-overlay');
+    gradientOverlay.style.opacity = '0';
+
+    // Wacht een moment om de standaard gradient te laten zien
+    await new Promise(resolve => setTimeout(resolve, 100));
 
     await requestLocation();
     await populateDropdown();
@@ -135,34 +140,41 @@ function setGradient() {
     console.log('Sunset time:', sunsetTime);
     console.log('Sunset end time:', sunsetEndTime);
 
-    let gradient;
+    const gradientOverlay = document.getElementById('gradient-overlay');
+    gradientOverlay.classList.remove('sunrise-gradient', 'day-gradient', 'sunset-gradient', 'night-gradient');
+
+    let gradientClass;
 
     if (sunriseTime && sunsetTime) {
         if (now >= sunriseTime && now < sunriseEndTime) {
             console.log('Setting gradient for Sunrise');
-            // Sunrise: #859FB1, #D0C8BB, #FFA53E
-            gradient = 'linear-gradient(to bottom, #859FB1, #D0C8BB, #FFA53E)';
+            gradientClass = 'sunrise-gradient';
         } else if (now >= sunriseEndTime && now < sunsetTime) {
             console.log('Setting gradient for Day');
-            // Day: #0C8AD7, #5CA6DD, #83ACE1
-            gradient = 'linear-gradient(to bottom, #0C8AD7, #5CA6DD, #83ACE1)';
+            gradientClass = 'day-gradient';
         } else if (now >= sunsetTime && now < sunsetEndTime) {
             console.log('Setting gradient for Sunset');
-            // Sunset: #625A8A, #B093BD, #FF9F77'
-            gradient = 'linear-gradient(to bottom, #625A8A, #B093BD, #FF9F77)';
+            gradientClass = 'sunset-gradient';
         } else {
             console.log('Setting gradient for Night');
-            // Night: #25282E, #22384F, #1C526A
-            gradient = 'linear-gradient(to bottom, #25282E, #22384F, #1C526A)';
+            gradientClass = 'night-gradient';
         }
     } else {
         console.log('Setting default gradient');
-        // Default gradient if sun times are not available
-        gradient = 'linear-gradient(to bottom, #25282E, #22384F, #1C526A)';
+        gradientClass = 'night-gradient';
     }
 
-    document.body.style.background = gradient;
+    gradientOverlay.classList.add(gradientClass);
+    gradientOverlay.style.opacity = '1';
+
+    // Voeg een timer toe om de oude gradient te verbergen na de transitie
+    setTimeout(() => {
+        document.body.className = gradientClass;
+        gradientOverlay.style.opacity = '0';
+    }, 2000); // De duur moet overeenkomen met de duur van de CSS-overgang
 }
+
+
 
 async function requestLocation() {
     if (navigator.geolocation) {
