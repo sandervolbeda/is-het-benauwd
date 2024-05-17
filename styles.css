@@ -31,7 +31,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    transition: opacity 2s ease-in-out;
+    transition: opacity 1s ease-in-out;
     opacity: 0;
     z-index: -1; /* Zorg ervoor dat de overlay niet boven de inhoud komt */
 }
@@ -196,11 +196,17 @@ input[type="text"] {
     }
 }
 
-
 .animate-image {
     animation: moveImage 15s infinite,
                pulse 20s infinite, 
                brightness 5s infinite alternate,
                skew 15s infinite alternate;
+    position: relative;
+}
+
+.animate-image-moon {
+    animation: moveImage 15s infinite,
+               pulse 20s infinite, 
+               brightness 5s infinite alternate;
     position: relative;
 }

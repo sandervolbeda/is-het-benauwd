@@ -174,8 +174,6 @@ function setGradient() {
     }, 2000); // De duur moet overeenkomen met de duur van de CSS-overgang
 }
 
-
-
 async function requestLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async function(position) {
@@ -330,15 +328,21 @@ function checkHumidity(lat, lon, isGeolocation = false) {
 
                 const now = new Date();
                 const currentTime = now.getTime();
+
+                let weatherImage = '';
                 if (currentTime >= sunsetTime.getTime() || currentTime < sunriseTime.getTime()) {
-                    // Show moon image if it's night time (overruling other images)
-                    document.querySelector('#weatherImageContainer img[alt="moon"]').style.display = 'block';
+                    weatherImage = 'moon';
                 } else if (weatherSummary.includes('onbewolkt') || weatherSummary.includes('zonnig')) {
-                    document.querySelector('#weatherImageContainer img[alt="sun"]').style.display = 'block';
+                    weatherImage = 'sun';
                 } else if (weatherSummary.includes('regen') || weatherSummary.includes('motregen')) {
-                    document.querySelector('#weatherImageContainer img[alt="rain"]').style.display = 'block';
+                    weatherImage = 'rain';
                 } else {
-                    document.querySelector('#weatherImageContainer img[alt="cloud"]').style.display = 'block';
+                    weatherImage = 'cloud';
+                }
+
+                const weatherImageElement = document.querySelector(`#weatherImageContainer img[alt="${weatherImage}"]`);
+                if (weatherImageElement) {
+                    weatherImageElement.style.display = 'block';
                 }
 
                 loadingSpin.style.display = 'none'; // Hide the loading spinner
@@ -357,3 +361,4 @@ function checkHumidity(lat, lon, isGeolocation = false) {
             resultElement.style.display = 'block'; // Show the weather result
         });
 }
+
