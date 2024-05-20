@@ -222,11 +222,11 @@ function calculateBreathlessnessIndex(temp, humidity, pressure, windSpeed, rainC
     console.log(`Rain Chance: ${rainChance}, Normalized Rain Chance: ${normalizedRainChance}`);
 
     // Geef gewichten aan elke parameter
-    const weightTemp = 0.4;
+    const weightTemp = 0.5;
     const weightHumidity = 0.3;
-    const weightPressure = 0.1;
+    const weightPressure = 0.05;
     const weightWindSpeed = 0.1;
-    const weightRainChance = 0.1;
+    const weightRainChance = 0.05;
 
     // Bereken de gewogen som
     const index = (normalizedTemp * weightTemp) +
@@ -361,4 +361,3 @@ function checkHumidity(lat, lon, isGeolocation = false) {
             resultElement.style.display = 'block'; // Show the weather result
         });
 }
-
