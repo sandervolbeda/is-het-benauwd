@@ -222,8 +222,8 @@ function calculateBreathlessnessIndex(temp, humidity, pressure, windSpeed, rainC
     console.log(`Rain Chance: ${rainChance}, Normalized Rain Chance: ${normalizedRainChance}`);
 
     // Geef gewichten aan elke parameter
-    const weightTemp = 0.5;
-    const weightHumidity = 0.3;
+    const weightTemp = 0.4;
+    const weightHumidity = 0.4;
     const weightPressure = 0.05;
     const weightWindSpeed = 0.1;
     const weightRainChance = 0.05;
@@ -237,22 +237,24 @@ function calculateBreathlessnessIndex(temp, humidity, pressure, windSpeed, rainC
 
     console.log(`Calculated Index: ${index}`);
 
-    // Schaal de index naar een schaal van 1 tot 10
-    const scaledIndex = Math.round(index * 10);
+    // Schaal de index naar een schaal van 0 tot 5
+    const scaledIndex = Math.round(index * 5);
     console.log(`Scaled Index: ${scaledIndex}`);
     return scaledIndex;
 }
 
 function describeBreathlessnessLevel(index) {
-    if (index <= 2) {
+    if (index === 0) {
         return 'Geen benauwdheid.';
-    } else if (index <= 4) {
+    } else if (index === 1) {
+        return 'Zeer milde benauwdheid.';
+    } else if (index === 2) {
         return 'Milde benauwdheid.';
-    } else if (index <= 6) {
+    } else if (index === 3) {
         return 'Matige benauwdheid.';
-    } else if (index <= 8) {
+    } else if (index === 4) {
         return 'Ernstige benauwdheid.';
-    } else if (index <= 10) {
+    } else if (index === 5) {
         return 'Extreme benauwdheid.';
     } else {
         return 'Geen resultaat';
