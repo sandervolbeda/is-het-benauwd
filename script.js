@@ -267,8 +267,10 @@ function checkHumidity(lat, lon, isGeolocation = false) {
     const scoreElement = document.getElementById('weatherScore');
     const weatherDescription = document.getElementById('weatherDescription');
     const weatherImageContainer = document.getElementById('weatherImageContainer');
+    const tempElement = document.getElementById('showTemp');
+
     
-    if (!loadingSpin || !resultElement || !scoreElement || !weatherDescription || !weatherImageContainer) {
+    if (!loadingSpin || !resultElement || !scoreElement || !weatherDescription || !weatherImageContainer || !tempElement) {
         console.error('One or more elements not found in the DOM');
         return;
     }
@@ -303,6 +305,8 @@ function checkHumidity(lat, lon, isGeolocation = false) {
                 const windSpeed = parseInt(weerdata.windkmh);
                 const rainChance = weerdata.neersl_perc_dag ? parseInt(weerdata.neersl_perc_dag) : 0;
                 const weatherSummary = weerdata.samenv;
+
+                tempElement.textContent = `${temp} °C`;
 
                 const breathlessnessIndex = calculateBreathlessnessIndex(temp, humidity, pressure, windSpeed, rainChance);
                 const description = describeBreathlessnessLevel(breathlessnessIndex);
