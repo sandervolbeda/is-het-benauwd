@@ -164,15 +164,21 @@ function setGradient() {
         gradientClass = 'night-gradient';
     }
 
-    gradientOverlay.classList.add(gradientClass);
-    gradientOverlay.style.opacity = '1';
+    // Apply the new gradient class to the body immediately
+    document.body.className = gradientClass;
 
-    // Voeg een timer toe om de oude gradient te verbergen na de transitie
+    // Add a slight delay before updating the overlay to allow CSS transition to catch up
     setTimeout(() => {
-        document.body.className = gradientClass;
-        gradientOverlay.style.opacity = '0';
-    }, 2000); // De duur moet overeenkomen met de duur van de CSS-overgang
+        gradientOverlay.classList.add(gradientClass);
+        gradientOverlay.style.opacity = '1';
+
+        // Hide the overlay after the transition
+        setTimeout(() => {
+            gradientOverlay.style.opacity = '0';
+        }, 2000); // Match this duration with the CSS transition duration
+    }, 50); // Adjust this delay if necessary
 }
+
 
 async function requestLocation() {
     if (navigator.geolocation) {
